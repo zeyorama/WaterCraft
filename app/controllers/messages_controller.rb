@@ -6,7 +6,11 @@ class MessagesController < ApplicationController
   end
 
   def show
-    @m = Message.find params[:id]
+    begin
+    	@m = Message.find params[:id]
+    rescue Exception => e
+    	redirect_to "/messages"
+    end
   end
 
   def new
@@ -14,10 +18,14 @@ class MessagesController < ApplicationController
   end
   
   def destroy
-    @m = Message.find params[:id]
-    @m.destroy
+    begin
+    	@m = Message.find params[:id]
+    	@m.destroy
     
-    redirect_to "/messages"
+    	redirect_to "/messages"
+    rescue Exception => e
+    	redirect_to "/messages"
+    end
   end
   
   def create
@@ -33,13 +41,17 @@ class MessagesController < ApplicationController
         render action: "new"
       end
     else
-      render action: "new"#/#{@m.id}"
+      render action: "new"
     end
   end
   
   def edit
-    @m1 = Message.find params[:id]
-    @m = Message.new :to_name => (User.find @m1.from_id).nick, :body => @m1.body, :betreff => "Re: #{@m1.betreff}"
+    begin
+    	@m1 = Message.find params[:id]
+    	@m = Message.new :to_name => (User.find @m1.from_id).nick, :body => @m1.body, :betreff => "Re: #{@m1.betreff}"
+    rescue Exception => e
+    	redirect_to "/messages"
+    end
   end
 
 end

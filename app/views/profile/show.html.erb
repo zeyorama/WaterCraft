@@ -1,180 +1,182 @@
 <div id="profile">
 
 <div id="profile_body">
-	<h3>
-		<%= @profil.nick %>s Profil
-	</h3>
-	<div id="img">
-			<%= image_tag "#{@profil.image}", :height => 260, :id => "Bild" if @profil.image? %>
-			<%= image_tag "Common/JohnDoe.jpg", :height => 260, :id => "Bild" unless @profil.image? %>
-	</div>
-	<div>
-		<div id="edit">
-		  <% if current_user.id == @profil.id %>
-		  	<%= link_to "Profil editieren", "/users/edit" %>
-		  <% end %>
+	<% unless @profil.nil? %>
+		<h3>
+			<%= @profil.nick %>s Profil
+		</h3>
+		<div id="img">
+				<%= image_tag "#{@profil.image}", :height => 260, :id => "Bild" if @profil.image? %>
+				<%= image_tag "Common/JohnDoe.jpg", :height => 260, :id => "Bild" unless @profil.image? %>
 		</div>
-		<table id="tableID">
-			<colgroup>
-				<col>
-				<col>
-			</colgroup>
-			<tr>
-				<th>Nick</th>
-				<td><%= @profil.nick %></td>
-			</tr>
-			<tr>
-				<th>Kämpfe</th>
-				<td><%= @anz %></td>
-			</tr>
-			<tr>
-				<th>
-					Siege
-				</th>
-				<td>
-					<%= @profil.win %>
-				</td>
-				<th>
-					Niederlagen
-				</th>
-				<td>
-					<%= @profil.lose %>
-				</td>
-			</tr>
-			<tr>
-				<th>
-					Ratio
-				</th>
-				<td>
-					<% unless @anz == 0 %>
-						<%= (@profil.win.to_f / @anz).round_to(3) %>
-					<% else %>
-						<%= 0 %>
-					<% end %>
-				</td>
-			</tr>
-		</table>
-	</div>
-</div>
-<br />
-<br />
-<br />
-<br />
-<br />
-
-<% unless @profil.fish_id.nil? %>
-
-<div id="userfish">
-	<h3><%= @profil.nick %>s Fisch</h3>
-	<div id="fishimg">
-		<%= image_tag "Fisch/#{@fish.race}.jpg", :height => 260, :id => "Bild" %>
-	</div>
-	<div>
-		<div id="edit">
-		  <% if current_user.id == @profil.id %>
-		  	<%= link_to "Neuer Fisch", "/profile/new", :confirm => "Willst du wirklich deinen eigenen Fisch töten?" %>
-		  	| <%= link_to "Fisch editieren", "/skills/edit" %> 
-		  	<!--| <%= link_to "Trainiere deinen Fisch", "/fight/train" %>-->
-		  <% else %>
-		    <%= link_to "Angreifen", "/fight/show/#{@profil.id}" %>
-		  <% end %>
+		<div>
+			<div id="edit">
+			  <% if current_user.id == @profil.id %>
+			  	<%= link_to "Profil editieren", "/users/edit" %>
+			  <% end %>
+			</div>
+			<table id="tableID">
+				<colgroup>
+					<col>
+					<col>
+				</colgroup>
+				<tr>
+					<th>Nick</th>
+					<td><%= @profil.nick %></td>
+				</tr>
+				<tr>
+					<th>Kämpfe</th>
+					<td><%= @anz %></td>
+				</tr>
+				<tr>
+					<th>
+						Siege
+					</th>
+					<td>
+						<%= @profil.win %>
+					</td>
+					<th>
+						Niederlagen
+					</th>
+					<td>
+						<%= @profil.lose %>
+					</td>
+				</tr>
+				<tr>
+					<th>
+						Ratio
+					</th>
+					<td>
+						<% unless @anz == 0 %>
+							<%= (@profil.win.to_f / @anz).round_to(3) %>
+						<% else %>
+							<%= 0 %>
+						<% end %>
+					</td>
+				</tr>
+			</table>
 		</div>
-		<table id="tableID">
-			<colgroup>
-				<col>
-				<col>
-			</colgroup>
-			<tr>
-				<th>Name</th>
-				<td><%= (@fish).name %></td>
-			</tr>
-			<tr>
-				<th>
-					Atrribute des Fisches:
-				</th>
-			</tr>
-			<tr>
-				<th>Rasse</th>
-				<td><%= getRaceName (@fish).race %></td>
-			</tr>
-			<tr>
-				<th>
-					Level
-				</th>
-				<td>
-					<%= (@fish).lvl %>
-				</td>
-			</tr>
-			<tr>
-				<th>
-					Erfahrung
-				</th>
-				<td>
-					<%= (@fish).exp %>
-				</td>
-			</tr>
-			<tr>
-				<th>
-					HP
-				</th>
-				<td>
-					<%= 2 * @fish.lvl + 2 * @fish.con + @fish.str + @fish.dex %>
-				</td>
-			</tr>
-			<tr>
-				<th>
-					Stärke
-				</th>
-				<td>
-					<%= (@fish).str %>
-				</td>
-			</tr>
-			<tr>
-				<th>
-					Verteidigung
-				</th>
-				<td>
-					<%= (@fish).dev %>
-				</td>
-			</tr>
-			<tr>
-				<th>
-					Kondition
-				</th>
-				<td>
-					<%= (@fish).con %>
-				</td>
-			</tr>
-			<tr>
-				<th>
-					Initiative
-				</th>
-				<td>
-					<%= (@fish).init %>
-				</td>
-			</tr>
-			<tr>
-				<th>
-					Geschicklichkeit
-				</th>
-				<td>
-					<%= (@fish).dex %>
-				</td>
-			</tr>
-		</table>
 	</div>
-</div>
+	<br />
+	<br />
+	<br />
+	<br />
+	<br />
 
-<%	else %>
+	<% unless @profil.fish_id.nil? %>
 
-	<div>
-		<%= @profil.nick %> hat keinen Fisch
-		<% if current_user.id == @profil.id %>
-		 | <%= link_to "Erstelle deinen Fish", "/profile/new" %>
-		<% end %>
+	<div id="userfish">
+		<h3><%= @profil.nick %>s Fisch</h3>
+		<div id="fishimg">
+			<%= image_tag "Fisch/#{@fish.race}.jpg", :height => 260, :id => "Bild" %>
+		</div>
+		<div>
+			<div id="edit">
+			  <% if current_user.id == @profil.id %>
+			  	<%= link_to "Neuer Fisch", "/profile/new", :confirm => "Willst du wirklich deinen eigenen Fisch töten?" %>
+			  	| <%= link_to "Fisch editieren", "/skills/edit" %>
+			  <% else %>
+				<%= link_to "Angreifen", "/fight/show/#{@profil.id}" %>
+			  <% end %>
+			</div>
+			<table id="tableID">
+				<colgroup>
+					<col>
+					<col>
+				</colgroup>
+				<tr>
+					<th>Name</th>
+					<td><%= (@fish).name %></td>
+				</tr>
+				<tr>
+					<th>
+						Atrribute des Fisches:
+					</th>
+				</tr>
+				<tr>
+					<th>Rasse</th>
+					<td><%= getRaceName (@fish).race %></td>
+				</tr>
+				<tr>
+					<th>
+						Level
+					</th>
+					<td>
+						<%= (@fish).lvl %>
+					</td>
+				</tr>
+				<tr>
+					<th>
+						Erfahrung
+					</th>
+					<td>
+						<%= (@fish).exp %>
+					</td>
+				</tr>
+				<tr>
+					<th>
+						HP
+					</th>
+					<td>
+						<%= 2 * @fish.lvl + 2 * @fish.con + @fish.str + @fish.dex %>
+					</td>
+				</tr>
+				<tr>
+					<th>
+						Stärke
+					</th>
+					<td>
+						<%= (@fish).str %>
+					</td>
+				</tr>
+				<tr>
+					<th>
+						Verteidigung
+					</th>
+					<td>
+						<%= (@fish).dev %>
+					</td>
+				</tr>
+				<tr>
+					<th>
+						Kondition
+					</th>
+					<td>
+						<%= (@fish).con %>
+					</td>
+				</tr>
+				<tr>
+					<th>
+						Initiative
+					</th>
+					<td>
+						<%= (@fish).init %>
+					</td>
+				</tr>
+				<tr>
+					<th>
+						Geschicklichkeit
+					</th>
+					<td>
+						<%= (@fish).dex %>
+					</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+
+	<%	else %>
+
+		<div>
+			<%= @profil.nick %> hat keinen Fisch
+			<% if current_user.id == @profil.id %>
+			 | <%= link_to "Erstelle deinen Fish", "/profile/new" %>
+			<% end %>
 		
-	</div>
+		</div>
 
-<% end %>
-
+	<% end %>
+	<% else %>
+		<h1>Kein Profil gefunden</h1>
+	<% end %>
 </div>

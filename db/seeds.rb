@@ -1,13 +1,15 @@
 #ENCODING: utf-8
-u = User.new :password => "miaumiau", :nick => "Quallenmann", :email => "Markus_Kretsch@gmx.de", :password_confirmation => "miaumiau", :isAdmin => true
-f = Fish.new :name => "Mrs Gisela", :lvl => 20, :race => 14
+
+#admins
+u = User.new :password => "miaumiau", :nick => "Quallenmann", :email => "max@mustermann.de", :password_confirmation => "miaumiau", :isAdmin => true
+f = Fish.new :name => "Mrs. Gisela", :lvl => 20, :race => 14
 f.save
 u.fish_id = f.id
 u.isAdmin = true
 u.save
 
 
-u = User.new :nick => "zeyorama", :email => "zeyorama@hotmail.de", :password => "zeyoramaadmin", :password_confirmation => "zeyoramaadmin", :isAdminb => true
+u = User.new :nick => "zeyorama", :email => "sponge@bob.de", :password => "zeyoramaadmin", :password_confirmation => "zeyoramaadmin", :isAdminb => true
 f = Fish.new :name => "St. Peter", :lvl => 20, :race => 2
 f.save
 u.fish_id = f.id
@@ -15,7 +17,6 @@ u.isAdmin = true
 u.save
 
 #skills
-
 Skill.create :name => "Dornen", 				:race => 0, :lvl => 5, :beschreibung => "Der Gegner wird verletzt, wenn er dich trifft.", :when => "hited"
 Skill.create :name => "Gift", 					:race => 0, :lvl => 30, :beschreibung => "Attacke: Vermindernder Angriff, der den Gegner vergiftet", :when => "att"
 Skill.create :name => "Flossenhieb", 			:race => 0, :lvl => 35, :beschreibung => "Attacke: Schlägt mit der Flosse, chance den Gegner auszusetzen", :when => "att"
@@ -91,11 +92,3 @@ Skill.create :name => "Flossenhieb", 			:race => 15, :lvl => 35, :beschreibung =
 Skill.create :name => "Erhöhte Stärke", 		:race => 15, :lvl => 40, :beschreibung => "Erhöht die Stärke", :when => "stat"
 Skill.create :name => "Meucheln", 				:race => 15, :lvl => 45, :beschreibung => "Attacke: Trifft den Gegner Stark erst ab 50% hp anwendbar", :when => "att"
 Skill.create :name => "Zerfleischen", 			:race => 15, :lvl => 60, :beschreibung => "Zerfleischt den Gegner löst bluten aus", :when => "att"
-
-# This file should contain all the record creation needed to seed the database with its default values.
-# The data can then be loaded with the rake db:seed (or created alongside the db with db:setup).
-#
-# Examples:
-#
-#   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
-#   Mayor.create(name: 'Emanuel', city: cities.first)

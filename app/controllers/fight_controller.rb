@@ -1,32 +1,36 @@
 class FightController < ApplicationController
   def show
-  	unless current_user.id == params[:id].to_i || (User.find params[:id]).fish_id.nil? || current_user.fish_id.nil?
-  		@Fehler = false
-	  	@attack = current_user
-	  	@defense = User.find params[:id]
-	  	@log = "<table id = 'fight' align=center>"
-	  	
-	  	@attack_creature = Creature.new ( Fish.find current_user.fish_id )
-	  	@defense_creature = Creature.new ( Fish.find @defense.fish_id )
-	  	@attack_creature.chooseBeginner @defense_creature
-	  	
-	  	@log = the_fight @attack_creature, @defense_creature, @log
-	  	
-	  	if @defense_creature.hp <= 0 && @attack_creature.hp <= 0
-	  		@log += "<div id='erg'> Uentschieden</div><br><br>"
-	  		draw @attack, @defense, @attack_creature, @defense_creature
-	  	elsif @defense_creature.hp <= 0
-	  		@log += "<div id='erg'>#{@attack.nick}s Fish #{@attack_creature.fish.name} gewinnt!</div><br><br>"
-	  		afterFight @attack, @defense, @attack_creature, @defense_creature
+  	begin
+	  	unless current_user.id == params[:id].to_i || (User.find params[:id]).fish_id.nil? || current_user.fish_id.nil?
+	  		@Fehler = false
+		  	@attack = current_user
+		  	@defense = User.find params[:id]
+		  	@log = "<table id = 'fight' align=center>"
+		  	
+		  	@attack_creature = Creature.new ( Fish.find current_user.fish_id )
+		  	@defense_creature = Creature.new ( Fish.find @defense.fish_id )
+		  	@attack_creature.chooseBeginner @defense_creature
+		  	
+		  	@log = the_fight @attack_creature, @defense_creature, @log
+		  	
+		  	if @defense_creature.hp <= 0 && @attack_creature.hp <= 0
+		  		@log += "<div id='erg'> Uentschieden</div><br><br>"
+		  		draw @attack, @defense, @attack_creature, @defense_creature
+		  	elsif @defense_creature.hp <= 0
+		  		@log += "<div id='erg'>#{@attack.nick}s Fish #{@attack_creature.fish.name} gewinnt!</div><br><br>"
+		  		afterFight @attack, @defense, @attack_creature, @defense_creature
+		  	else
+		  		@log += "<div id='erg'>#{@defense.nick}s Fisch #{@defense_creature.fish.name} gewinnt!</div><br><br>"
+		  		afterFight @defense, @attack, @defense_creature, @attack_creature
+		  	end
+		  	
+		  	@m = Message.create :from_id => 1, :to_id => @defense.id, :body => "Ihr wurdet von #{@attack.nick} angegriffen. #{@log}", :betreff => "Angriff von #{@attack.nick} am #{Time.now.strftime('%d.%m.%Y')}", :to_name => @defense.nick
 	  	else
-	  		@log += "<div id='erg'>#{@defense.nick}s Fisch #{@defense_creature.fish.name} gewinnt!</div><br><br>"
-	  		afterFight @defense, @attack, @defense_creature, @attack_creature
+	  		@Fehler = true
 	  	end
-	  	
-	  	@m = Message.create :from_id => 1, :to_id => @defense.id, :body => "Ihr wurdet von #{@attack.nick} angegriffen. #{@log}", :betreff => "Angriff von #{@attack.nick} am #{Time.now.strftime('%d.%m.%Y')}", :to_name => @defense.nick
-  	else
-  		@Fehler = true
-  	end
+	  rescue Exception => e 
+	  	@Fehler = true
+	  end
   end
 
   def nextLvl lvl

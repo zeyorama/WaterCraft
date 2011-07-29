@@ -17,6 +17,9 @@
 			<th>
 				SiegQuote
 			</th>
+			<th></th>
+			<th></th>
+			<th></th>
 		
 		</tr>
 		<% @u.each do |user| %>
@@ -47,16 +50,21 @@
 					<% end %>
 				</td>
 				<td>
+					<% unless current_user.id == user.id || user.fish_id.nil? || current_user.fish_id.nil? %>
+						<%= link_to "Angreifen", "/fight/show/#{user.id}" %>
+					<% end %>
+				</td>
+				<td>
+					<% if user.isAdmin %>
+						<code><%= "Admin" %></code>
+					<% end %>
+				</td>
+				<td>
 					<% if current_user.isAdmin == true %>
 						<% if user.isAdmin == false %>
 							<%= link_to "User entfernen", "/profile/delete/#{user.id}", :confirm => "User wirklich löschen?" %>
 						<% end %>
 					<% end %>
-				</td>
-				<td>
-					<%# if user.isAdmin %>
-						<%#= "Admin" %>
-					<%# end %>
 				</td>
 		</tr>
 		<% end %>

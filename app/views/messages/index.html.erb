@@ -28,6 +28,9 @@
 				<td>
 					<%= message.created_at.strftime('%d.%m.%Y') %>
 				</td>
+				<td>
+					<%= link_to "Löschen", "/messages/#{message.id}", :method => "delete" %>
+				</td>
 		</tr>
 		<% end %>
 	</table>
