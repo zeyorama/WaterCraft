@@ -23,13 +23,11 @@ attr_accessor :blut, :gift, :turn, :fish, :para, :hp, :reduce, :anzahl, :hart, :
 		@reduce = 1
 		@hp		= 2 * @fish.lvl + 2 * @con + @str + @dex
 		@fs		= FishSkill.where("points > 0").where(:fish_id => @fish.id)
-  		fs 		= FishSkill.where :fish_id => @fish.id
-  		skillof	= FishSkill.where("points > 0").where :fish_id => @fish.id#f_id
   		
 	  	#f_id = @fish.id
 	  	i = 0
-	  	skillof.each do |fs|
-	  		tmp = getSkillsInit #fs :id
+	  	@fs.each do |fs|
+	  		tmp = getSkillsInit fs.skill_id
 	  		unless tmp.first.nil?
 	  			if tmp.first.name == "Starke Verteidigung"
 	  				@dev += Math.sqrt(fs.points).to_i
@@ -46,7 +44,7 @@ attr_accessor :blut, :gift, :turn, :fish, :para, :hp, :reduce, :anzahl, :hart, :
 			 i += 1
 	  	end
 	  	
-		fs.each do |s|
+		@fs.each do |s|
 			tmp = Skill.where :id => s.skill_id, :when => "hited"
 			unless tmp.first.nil?
 				if tmp.first.name == "Dehnbarkeit"
@@ -56,8 +54,8 @@ attr_accessor :blut, :gift, :turn, :fish, :para, :hp, :reduce, :anzahl, :hart, :
 		end
 	end
 	
-	def getSkillsInit #frish id
-		return Skill.all
+	def getSkillsInit id
+		return Skill.where :id => id
 	end
 	
 	def getExp i
@@ -142,7 +140,7 @@ attr_accessor :blut, :gift, :turn, :fish, :para, :hp, :reduce, :anzahl, :hart, :
 		log = ""
 		skills = [ ["Tackle",1], ["Tackle",1], ["Tackle",1] ]
 		@fs.each do |s|
-			tmp = getSkill :id, s
+			tmp = getSkill s
 			unless tmp.first.nil?
 				if tmp.first.name == "Meucheln"
 					if def_creature.hp <= def_creature.fish.hp/2
@@ -282,10 +280,10 @@ attr_accessor :blut, :gift, :turn, :fish, :para, :hp, :reduce, :anzahl, :hart, :
 			unless tmp.first.nil?
 				if tmp.first.name == "Dornen"
 					fish_attacker.hp -= Math.sqrt(s.points).to_i
-					log += "<tr><td></td><td>Dornen</td><td>#{fish_attacker.fish.name}</td><td>-#{Math.sqrt(s.points).to_i}HP</td>"
+					log += "<tr><td></td><td>Dornen</td><td>#{fish_attacker.fish.name}</td><td>-#{Math.sqrt(s.points).to_i} HP</td>"
 				elsif tmp.first.name == "Aufgeladen"
 					fish_attacker.hp -= Math.sqrt(s.points).to_i
-					log += "<tr><td></td><td>Aufladung</td><td>#{fish_attacker.fish.name}</td><td>-#{Math.sqrt(s.points).to_i}HP</td>"
+					log += "<tr><td></td><td>Aufladung</td><td>#{fish_attacker.fish.name}</td><td>-#{Math.sqrt(s.points).to_i} HP</td>"
 				elsif tmp.first.name == "Konter"
 					if rand(20-Math.sqrt(s.points).to_i) == 0
 						log += "<tr><td>Konter:</td></tr>"
@@ -300,11 +298,11 @@ attr_accessor :blut, :gift, :turn, :fish, :para, :hp, :reduce, :anzahl, :hart, :
 	def postCondition
 		if @gift != 0
 			@hp -= Math.sqrt(@gift).to_i
-			return "<tr><td></td><td>Gift</td><td>#{@fish.name}</td><td>-#{@gift}HP</td>"
+			return "<tr><td></td><td>Gift</td><td>#{@fish.name}</td><td>-#{@gift} HP</td>"
 		end
 		if @blut != 0
 			@hp -= Math.sqrt(@blut).to_i
-			return "<tr><td></td><td>Blutung</td><td>#{@fish.name}</td><td>-#{@blut}HP</td>"
+			return "<tr><td></td><td>Blutung</td><td>#{@fish.name}</td><td>-#{@blut} HP</td>"
 		end
 		return ""
 	end
@@ -319,12 +317,8 @@ attr_accessor :blut, :gift, :turn, :fish, :para, :hp, :reduce, :anzahl, :hart, :
 		end
 	end
 	
-	def getSkillsbyHit id 
-	
-	end
-	
-	def getSkill id, s
-		return Skill.where id => s.skill_id, :when => "att"
+	def getSkill s
+		return Skill.where :id => s.skill_id, :when => "att"
 	end
 	
 end
